@@ -1,14 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CarouselCards, LogoBadge } from "@/components/ui/carousel-cards";
+import { CarouselCards } from "@/components/ui/carousel-cards";
 
-type Logo = { text: string; bg: string; light?: boolean };
-
-const commercialModel: { phase: string; title: string; logo: Logo; items: string[] }[] = [
+const commercialModel = [
   {
     phase: "Phase 1",
     title: "MVP Design & Launch Readiness",
-    logo: { text: "MVNE", bg: "#0369A1" },
     items: [
       "Minimum Viable Customer Launch Proposition",
       "Go-to-Market plan (sales, distribution, CX)",
@@ -19,7 +16,6 @@ const commercialModel: { phase: string; title: string; logo: Logo; items: string
   {
     phase: "Phase 2",
     title: "Platform Build & Integration",
-    logo: { text: "DSG", bg: "#0F172A" },
     items: [
       "OSS/BSS platform configuration",
       "MNO integration & provisioning",
@@ -30,7 +26,6 @@ const commercialModel: { phase: string; title: string; logo: Logo; items: string
   {
     phase: "Phase 3",
     title: "Launch & Scale",
-    logo: { text: "MTN", bg: "#FCD116", light: false },
     items: [
       "Soft launch with controlled subscriber base",
       "CVM and marketing automation activated",
@@ -93,12 +88,9 @@ export default function CommercialSection() {
             {commercialModel.map((phase, i) => (
               <Card key={phase.phase} className="proposal-card bg-white border border-slate-200 h-full">
                 <CardContent className="pt-6 pb-6 flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-4">
-                    <LogoBadge text={phase.logo.text} bg={phase.logo.bg} light={phase.logo.light !== false} />
-                    <Badge className="bg-[#0369A1]/10 text-[#0369A1] border-0 text-xs">
-                      {phase.phase}
-                    </Badge>
-                  </div>
+                  <Badge className="mb-3 bg-[#0369A1]/10 text-[#0369A1] border-0 text-xs self-start">
+                    {phase.phase}
+                  </Badge>
                   <h3 className="font-bold text-[#0F172A] mb-4 text-sm">{phase.title}</h3>
                   <ul className="space-y-2 flex-1">
                     {phase.items.map((item) => (
