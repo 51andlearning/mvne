@@ -32,9 +32,10 @@ export default function ScopeSection() {
     <section id="scope" className="py-20 px-6 bg-white">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
-          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider mb-3">
+          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider">
             Scope of Work
           </p>
+          <div className="accent-bar" />
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-6 max-w-2xl">
             Two Paths to Market — One Proven Partner
           </h2>

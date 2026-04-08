@@ -78,9 +78,10 @@ export default function DsgDifferenceSection() {
     <section id="dsg-difference" className="py-20 px-6 bg-white">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
-          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider mb-3">
+          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider">
             The DSG Difference
           </p>
+          <div className="accent-bar" />
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-6 max-w-2xl">
             25 Years of Digital Innovation Across Africa
           </h2>
@@ -96,7 +97,7 @@ export default function DsgDifferenceSection() {
         {/* Business units grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {businessUnits.map((unit) => (
-            <Card key={unit.name} className="border border-slate-100 hover:shadow-md transition-shadow">
+            <Card key={unit.name} className="proposal-card border border-slate-100">
               <CardContent className="pt-6 pb-6">
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="font-bold text-[#0F172A]">{unit.name}</h3>

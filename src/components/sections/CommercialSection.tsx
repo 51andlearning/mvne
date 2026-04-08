@@ -54,9 +54,10 @@ export default function CommercialSection() {
     <section id="commercial" className="py-20 px-6 bg-slate-50">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
-          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider mb-3">
+          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider">
             Commercial Terms
           </p>
+          <div className="accent-bar" />
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-6 max-w-2xl">
             A Capital-Light, OPEX-Only Commercial Model
           </h2>
@@ -83,7 +84,7 @@ export default function CommercialSection() {
         {/* Delivery phases */}
         <div className="grid sm:grid-cols-3 gap-6 mb-12">
           {commercialModel.map((phase, i) => (
-            <Card key={phase.phase} className="bg-white border border-slate-200">
+            <Card key={phase.phase} className="proposal-card bg-white border border-slate-200">
               <CardContent className="pt-6 pb-6">
                 <Badge className="mb-3 bg-[#0369A1]/10 text-[#0369A1] border-0 text-xs">
                   {phase.phase}

@@ -65,9 +65,10 @@ export default function VasSection() {
     <section id="vas" className="py-20 px-6 bg-slate-50">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
-          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider mb-3">
+          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider">
             Value-Added Services
           </p>
+          <div className="accent-bar" />
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-6 max-w-2xl">
             VAS = Revenue + Differentiation + Retention
           </h2>
@@ -81,7 +82,7 @@ export default function VasSection() {
         {/* VAS grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
           {vasCategories.map((vas) => (
-            <Card key={vas.title} className="bg-white border border-slate-200 hover:shadow-md transition-shadow">
+            <Card key={vas.title} className="proposal-card bg-white border border-slate-200">
               <CardContent className="pt-6 pb-6">
                 <div className="text-2xl mb-3">{vas.icon}</div>
                 <div className="mb-3">

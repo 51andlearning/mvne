@@ -123,8 +123,53 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-inter), Inter, sans-serif;
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
+}
+
+/* ─── GCT Design System Tokens ─── */
+:root {
+  --color-navy:   #0F172A;
+  --color-accent: #0369A1;
+  --color-cyan:   #38BDF8;
+  --color-danger: #C8102E;
+  --color-surface: #F8FAFC;
+  --color-muted:  #64748B;
+  --color-slate2: #334155;
+}
+
+/* Accent bar — 3.5rem wide, 4px tall, accent colour, 2px radius */
+.accent-bar {
+  width: 3.5rem;
+  height: 4px;
+  background: var(--color-accent);
+  border-radius: 2px;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Section alt background */
+.section-alt {
+  background-color: var(--color-surface);
+}
+
+/* Proposal card — hover lift + accent shadow */
+.proposal-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.proposal-card:hover {
+  box-shadow: 0 8px 30px rgba(3, 105, 161, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Nav link hover */
+.nav-link {
+  transition: color 0.2s ease;
+}
+.nav-link:hover {
+  color: var(--color-accent);
 }

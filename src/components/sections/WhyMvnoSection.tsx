@@ -51,9 +51,10 @@ export default function WhyMvnoSection() {
     <section id="why-mvno" className="py-20 px-6 bg-slate-50">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
-          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider mb-3">
+          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider">
             Why MVNO
           </p>
+          <div className="accent-bar" />
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-6 max-w-2xl">
             MVNOs Are No Longer Side Projects — They Are Strategic Digital Brands
           </h2>
@@ -66,7 +67,7 @@ export default function WhyMvnoSection() {
         {/* 5 dimensions */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
           {dimensions.map((d) => (
-            <Card key={d.code} className="border border-slate-200 bg-white hover:shadow-md transition-shadow">
+            <Card key={d.code} className="proposal-card border border-slate-200 bg-white">
               <CardContent className="pt-6 pb-6">
                 <span className="inline-block bg-[#0369A1]/10 text-[#0369A1] text-xs font-bold px-2 py-1 rounded mb-3">
                   {d.code}

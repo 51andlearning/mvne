@@ -16,8 +16,8 @@ export default function NavSection() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#0F172A] border-b border-white/10 shadow-lg">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-50 bg-[#0F172A] border-b border-white/10 shadow-md">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-20">
         <div className="flex items-center gap-4">
           <span className="text-white font-bold text-lg tracking-tight">MVNE</span>
           <span className="hidden sm:block text-white/40 text-sm">×</span>
@@ -25,12 +25,12 @@ export default function NavSection() {
         </div>
 
         {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-5">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-white/70 hover:text-white text-sm px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors"
+              className="nav-link text-white/70 text-xs font-semibold transition-colors"
             >
               {link.label}
             </a>
@@ -40,7 +40,7 @@ export default function NavSection() {
         <div className="hidden lg:block">
           <a
             href="#signatures"
-            className="inline-flex items-center justify-center rounded-lg px-4 py-1.5 text-sm font-medium bg-[#0369A1] hover:bg-[#0284C7] text-white transition-colors"
+            className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-xs font-bold bg-[#C8102E] hover:bg-red-700 text-white transition-colors"
           >
             Accept Proposal
           </a>
@@ -78,7 +78,7 @@ export default function NavSection() {
           <a
             href="#signatures"
             onClick={() => setOpen(false)}
-            className="mt-3 inline-flex items-center justify-center rounded-lg px-4 py-1.5 text-sm font-medium bg-[#0369A1] hover:bg-[#0284C7] text-white transition-colors self-start"
+            className="mt-3 inline-flex items-center justify-center rounded-lg px-4 py-2 text-xs font-bold bg-[#C8102E] hover:bg-red-700 text-white transition-colors self-start"
           >
             Accept Proposal
           </a>

@@ -32,9 +32,10 @@ export default function IntroSection() {
     <section id="introduction" className="py-20 px-6 bg-white">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
-          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider mb-3">
+          <p className="text-[#0369A1] text-sm font-semibold uppercase tracking-wider">
             Executive Summary
           </p>
+          <div className="accent-bar" />
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-6 max-w-2xl">
             A Strategic MVNO Partnership for Centurion and Co
           </h2>
@@ -63,13 +64,13 @@ export default function IntroSection() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {capabilities.map((cap) => (
-            <Card key={cap.title} className="border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+            <Card key={cap.title} className="proposal-card border border-slate-100 shadow-sm">
               <CardContent className="pt-6 pb-6">
                 <div className="text-3xl mb-4">{cap.icon}</div>
                 <h3 className="font-semibold text-[#0F172A] mb-2 text-sm leading-snug">
                   {cap.title}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{cap.description}</p>
+                <p className="text-[#64748B] text-sm leading-relaxed">{cap.description}</p>
               </CardContent>
             </Card>
           ))}
