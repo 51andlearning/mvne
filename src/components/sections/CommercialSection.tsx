@@ -2,7 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CarouselCards, LogoBadge } from "@/components/ui/carousel-cards";
 
-const commercialModel = [
+type Logo = { text: string; bg: string; light?: boolean };
+
+const commercialModel: { phase: string; title: string; logo: Logo; items: string[] }[] = [
   {
     phase: "Phase 1",
     title: "MVP Design & Launch Readiness",

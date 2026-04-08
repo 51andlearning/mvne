@@ -2,7 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CarouselCards, LogoBadge } from "@/components/ui/carousel-cards";
 
-const businessUnits = [
+type Logo = { text: string; bg: string; light?: boolean };
+
+const businessUnits: { name: string; focus: string; logo: Logo; capabilities: string[] }[] = [
   {
     name: "CXG",
     focus: "Integrated CX Solutions",
@@ -71,7 +73,7 @@ const businessUnits = [
   },
 ];
 
-const partners = [
+const partners: { name: string; role: string; logo: Logo }[] = [
   { name: "Globetom", role: "iPaaS & BSS (TM Forum Open APIs)", logo: { text: "GT", bg: "#1E3A5F" } },
   { name: "Flolive", role: "IoT / eSIM platform", logo: { text: "FL", bg: "#0891B2" } },
   { name: "Pharos Avantgard", role: "USSD, SMSC, PCRF", logo: { text: "PA", bg: "#374151" } },
