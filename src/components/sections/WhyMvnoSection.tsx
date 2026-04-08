@@ -1,30 +1,36 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { CarouselCards, LogoBadge } from "@/components/ui/carousel-cards";
 
 const dimensions = [
   {
     code: "CVP",
     title: "Customer Value Proposition",
     description: "A value proposition that resonates deeply with your target audience — answering why a customer should choose you over anyone else.",
+    logo: { text: "MVNE", bg: "#0369A1" },
   },
   {
     code: "Marketing",
     title: "Data-Driven Marketing",
     description: "Scalable, data-driven customer acquisition and retention strategies that leverage your existing brand equity.",
+    logo: { text: "Broadbrand", bg: "#EA580C" },
   },
   {
     code: "CV",
     title: "Customer Value Management",
     description: "Maximise ARPU, engagement, and brand lifetime value through AI-driven personalisation and CVM.",
+    logo: { text: "Xanite", bg: "#7C3AED" },
   },
   {
     code: "CX",
     title: "Customer Experience",
     description: "Frictionless, digital-first and emotionally intelligent experiences across every channel.",
+    logo: { text: "CXG", bg: "#0D9488" },
   },
   {
     code: "VAS",
     title: "Value-Added Services",
     description: "Smart service bundling that unlocks loyalty and margin — insurance, OTT, eSIM, security, and more.",
+    logo: { text: "MVNE", bg: "#0369A1" },
   },
 ];
 
@@ -64,19 +70,24 @@ export default function WhyMvnoSection() {
           </p>
         </div>
 
-        {/* 5 dimensions */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-          {dimensions.map((d) => (
-            <Card key={d.code} className="proposal-card border border-slate-200 bg-white">
-              <CardContent className="pt-6 pb-6">
-                <span className="inline-block bg-[#0369A1]/10 text-[#0369A1] text-xs font-bold px-2 py-1 rounded mb-3">
-                  {d.code}
-                </span>
-                <h3 className="font-semibold text-[#0F172A] mb-2">{d.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{d.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+        {/* 5 dimensions carousel */}
+        <div className="mb-16">
+          <CarouselCards desktopPerView={3}>
+            {dimensions.map((d) => (
+              <Card key={d.code} className="proposal-card border border-slate-200 bg-white h-full">
+                <CardContent className="pt-6 pb-6 flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-4">
+                    <LogoBadge text={d.logo.text} bg={d.logo.bg} />
+                    <span className="inline-block bg-[#0369A1]/10 text-[#0369A1] text-xs font-bold px-2 py-1 rounded">
+                      {d.code}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-[#0F172A] mb-2">{d.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed flex-1">{d.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </CarouselCards>
         </div>
 
         {/* Market stats */}

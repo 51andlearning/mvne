@@ -1,10 +1,12 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CarouselCards, LogoBadge } from "@/components/ui/carousel-cards";
 
 const businessUnits = [
   {
     name: "CXG",
     focus: "Integrated CX Solutions",
+    logo: { text: "CXG", bg: "#0D9488" },
     capabilities: [
       "Omni-channel support (contact centre, social, WhatsApp, SMS, email)",
       "IT service desk & workforce management",
@@ -15,6 +17,7 @@ const businessUnits = [
   {
     name: "Broadbrand",
     focus: "Marketing as a Service",
+    logo: { text: "BB", bg: "#EA580C" },
     capabilities: [
       "AI-driven strategy & content creation",
       "Digital advertising, SEO/SEM, social CRM",
@@ -25,6 +28,7 @@ const businessUnits = [
   {
     name: "Digital Resilience",
     focus: "Cybersecurity Solutions",
+    logo: { text: "DR", bg: "#1E3A5F" },
     capabilities: [
       "Managed security services",
       "Enterprise and consumer cyber defence",
@@ -35,6 +39,7 @@ const businessUnits = [
   {
     name: "eInsurer",
     focus: "Cyber Insurance",
+    logo: { text: "eI", bg: "#2563EB" },
     capabilities: [
       "Identity theft protection",
       "Data restoration coverage",
@@ -45,6 +50,7 @@ const businessUnits = [
   {
     name: "Digital Mall / UFreight",
     focus: "4PL & eCommerce",
+    logo: { text: "DM", bg: "#7C3AED" },
     capabilities: [
       "Device sourcing, warehousing & last mile delivery",
       "Full RICA process management",
@@ -55,6 +61,7 @@ const businessUnits = [
   {
     name: "MVNE",
     focus: "MVNO Enablement",
+    logo: { text: "MVNE", bg: "#0369A1" },
     capabilities: [
       "Full MVNO platform: OSS/BSS, OCS, CVM, digital channels",
       "VAS integration (insurance, OTT, eSIM, security)",
@@ -65,12 +72,12 @@ const businessUnits = [
 ];
 
 const partners = [
-  { name: "Globetom", role: "iPaaS & BSS (TM Forum Open APIs)" },
-  { name: "Flolive", role: "IoT / eSIM platform" },
-  { name: "Pharos Avantgard", role: "USSD, SMSC, PCRF" },
-  { name: "NetEngage", role: "Converged Billing / OCS" },
-  { name: "Lumine Group", role: "Global comms software ecosystem ($49B)" },
-  { name: "MTN", role: "Host MNO — network agnostic capable" },
+  { name: "Globetom", role: "iPaaS & BSS (TM Forum Open APIs)", logo: { text: "GT", bg: "#1E3A5F" } },
+  { name: "Flolive", role: "IoT / eSIM platform", logo: { text: "FL", bg: "#0891B2" } },
+  { name: "Pharos Avantgard", role: "USSD, SMSC, PCRF", logo: { text: "PA", bg: "#374151" } },
+  { name: "NetEngage", role: "Converged Billing / OCS", logo: { text: "NE", bg: "#059669" } },
+  { name: "Lumine Group", role: "Global comms software ecosystem ($49B)", logo: { text: "LG", bg: "#D97706" } },
+  { name: "MTN", role: "Host MNO — network agnostic capable", logo: { text: "MTN", bg: "#FCD116", light: false } },
 ];
 
 export default function DsgDifferenceSection() {
@@ -94,45 +101,51 @@ export default function DsgDifferenceSection() {
           </p>
         </div>
 
-        {/* Business units grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {businessUnits.map((unit) => (
-            <Card key={unit.name} className="proposal-card border border-slate-100">
-              <CardContent className="pt-6 pb-6">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-bold text-[#0F172A]">{unit.name}</h3>
-                  <Badge variant="secondary" className="text-xs ml-2 flex-shrink-0">
-                    {unit.focus}
-                  </Badge>
-                </div>
-                <ul className="space-y-1.5">
-                  {unit.capabilities.map((cap) => (
-                    <li key={cap} className="flex items-start gap-2 text-sm text-slate-500">
-                      <span className="text-[#0369A1] mt-0.5 flex-shrink-0">›</span>
-                      {cap}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
+        {/* Business units carousel */}
+        <div className="mb-16">
+          <CarouselCards desktopPerView={3}>
+            {businessUnits.map((unit) => (
+              <Card key={unit.name} className="proposal-card border border-slate-100 h-full">
+                <CardContent className="pt-6 pb-6 flex flex-col h-full">
+                  <div className="flex items-start justify-between mb-4">
+                    <LogoBadge text={unit.logo.text} bg={unit.logo.bg} light={unit.logo.light !== false} />
+                    <Badge variant="secondary" className="text-xs ml-2 flex-shrink-0">
+                      {unit.focus}
+                    </Badge>
+                  </div>
+                  <h3 className="font-bold text-[#0F172A] mb-3">{unit.name}</h3>
+                  <ul className="space-y-1.5 flex-1">
+                    {unit.capabilities.map((cap) => (
+                      <li key={cap} className="flex items-start gap-2 text-sm text-slate-500">
+                        <span className="text-[#0369A1] mt-0.5 flex-shrink-0">›</span>
+                        {cap}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </CarouselCards>
         </div>
 
-        {/* Technology partners */}
-        <div className="bg-slate-50 rounded-2xl p-8">
+        {/* Technology partners carousel */}
+        <div className="bg-slate-50 rounded-2xl p-8 mb-10">
           <h3 className="font-bold text-[#0F172A] text-xl mb-6">Technology Partners</h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <CarouselCards desktopPerView={3}>
             {partners.map((p) => (
-              <div key={p.name} className="bg-white border border-slate-200 rounded-lg px-4 py-3">
-                <p className="font-semibold text-[#0F172A] text-sm">{p.name}</p>
-                <p className="text-slate-500 text-xs mt-0.5">{p.role}</p>
+              <div key={p.name} className="proposal-card bg-white border border-slate-200 rounded-xl px-4 py-5 flex flex-col gap-3">
+                <LogoBadge text={p.logo.text} bg={p.logo.bg} light={p.logo.light !== false} />
+                <div>
+                  <p className="font-semibold text-[#0F172A] text-sm">{p.name}</p>
+                  <p className="text-slate-500 text-xs mt-0.5">{p.role}</p>
+                </div>
               </div>
             ))}
-          </div>
+          </CarouselCards>
         </div>
 
         {/* Credentials strip */}
-        <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { value: "13+", label: "Years MVNO enablement" },
             { value: "25+", label: "Years DSG Group" },

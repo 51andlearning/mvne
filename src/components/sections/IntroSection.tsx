@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { CarouselCards, LogoBadge } from "@/components/ui/carousel-cards";
 
 const capabilities = [
   {
@@ -6,24 +7,28 @@ const capabilities = [
     title: "End-to-End MVNO Enablement",
     description:
       "Full lifecycle support including SIM provisioning, network integration, billing, customer management, and value-added services.",
+    logo: { text: "MVNE", bg: "#0369A1" },
   },
   {
     icon: "🔗",
     title: "Seamless VAS Integration",
     description:
       "Robust APIs and workflow automation ensuring real-time data and unified customer experiences across all touchpoints.",
+    logo: { text: "DSG", bg: "#0F172A" },
   },
   {
     icon: "⚡",
     title: "Rapid Time-to-Market",
     description:
       "A proven project methodology with a dedicated delivery team that has launched MVNOs across Africa and beyond.",
+    logo: { text: "MVNE", bg: "#0369A1" },
   },
   {
     icon: "📈",
     title: "Flexible Commercial Models",
     description:
       "Transparent pricing and scalable revenue-share options designed for sustainable growth and capital-light operations.",
+    logo: { text: "DSG", bg: "#0F172A" },
   },
 ];
 
@@ -62,19 +67,22 @@ export default function IntroSection() {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <CarouselCards desktopPerView={4}>
           {capabilities.map((cap) => (
-            <Card key={cap.title} className="proposal-card border border-slate-100 shadow-sm">
-              <CardContent className="pt-6 pb-6">
+            <Card key={cap.title} className="proposal-card border border-slate-100 shadow-sm h-full">
+              <CardContent className="pt-6 pb-6 flex flex-col h-full">
+                <div className="mb-3">
+                  <LogoBadge text={cap.logo.text} bg={cap.logo.bg} />
+                </div>
                 <div className="text-3xl mb-4">{cap.icon}</div>
                 <h3 className="font-semibold text-[#0F172A] mb-2 text-sm leading-snug">
                   {cap.title}
                 </h3>
-                <p className="text-[#64748B] text-sm leading-relaxed">{cap.description}</p>
+                <p className="text-[#64748B] text-sm leading-relaxed flex-1">{cap.description}</p>
               </CardContent>
             </Card>
           ))}
-        </div>
+        </CarouselCards>
       </div>
     </section>
   );
