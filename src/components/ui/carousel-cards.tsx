@@ -1,147 +1,172 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const AUTO_PLAY_MS = 2000;        // 2 seconds normal rotation
-const MANUAL_PAUSE_MS = 300_000;  // 5 minutes pause after manual interaction
+const AUTO_PLAY_MS   = 2_000;    // 2 s auto-advance
+const MANUAL_PAUSE_MS = 300_000; // 5 min pause after manual interaction
+const SLIDE_MS       = 700;      // smooth & gentle slide duration
 
 interface CarouselCardsProps {
   children: React.ReactNode[];
   desktopPerView?: number;
 }
 
-export function CarouselCards({ children, desktopPerView = 3 }: CarouselCardsProps) {
-  const [perView, setPerView] = useState(desktopPerView);
-  const [current, setCurrent] = useState(0);
-  const pausedUntilRef = useRef<number>(0); // timestamp until which auto-play is paused
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+/**
+ * Infinite-loop carousel — cards flow continuously in a circular fashion.
+ *
+ * Strategy: clone `perView` items from each end of the list so the
+ * wrap-around is invisible. After the CSS transition completes we silently
+ * teleport from the clone back to its real counterpart (no flash).
+ */
+export function CarouselCards({
+  children,
+  desktopPerView = 3,
+}: CarouselCardsProps) {
+  const items = children;
+  const n     = items.length;
 
+  const [perView,  setPerView]  = useState(desktopPerView);
+  // idx into the *cloned* array; real items occupy [perView … perView+n-1]
+  const [idx,      setIdx]      = useState(desktopPerView);
+  const [animated, setAnimated] = useState(true);
+  const pausedUntil = useRef(0);
+
+  /* ── Responsive perView ─────────────────────────────────────────── */
   useEffect(() => {
-    const update = () => {
-      if (window.innerWidth < 640) setPerView(1);
-      else if (window.innerWidth < 1024) setPerView(2);
-      else setPerView(desktopPerView);
+    const calc = () =>
+      window.innerWidth < 640 ? 1 : window.innerWidth < 1024 ? 2 : desktopPerView;
+
+    const onResize = () => {
+      const pv = calc();
+      setAnimated(false);
+      setPerView(pv);
+      setIdx(pv); // reset to first real item, no animation
+      // Re-enable transition after React has painted the new position
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => setAnimated(true))
+      );
     };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [desktopPerView]);
 
-  const total = Math.ceil(children.length / perView);
-
+  /* ── Infinite-loop teleport ──────────────────────────────────────── */
+  // When idx lands in a clone region, wait for the slide to finish then
+  // silently jump back to the equivalent real position.
   useEffect(() => {
-    setCurrent(0);
-  }, [perView]);
+    if (n <= perView) return;
+    const inClone = idx < perView || idx >= n + perView;
+    if (!inClone) return;
 
-  // Start auto-play ticker
+    const timer = setTimeout(() => {
+      setAnimated(false);
+      setIdx(curr => {
+        if (curr >= n + perView) return perView + (curr - n - perView);
+        if (curr <  perView)     return n + perView + (curr - perView);
+        return curr;
+      });
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => setAnimated(true))
+      );
+    }, SLIDE_MS);
+
+    return () => clearTimeout(timer);
+  }, [idx, n, perView]);
+
+  /* ── Auto-play ───────────────────────────────────────────────────── */
   useEffect(() => {
-    if (total <= 1) return;
-    timerRef.current = setInterval(() => {
-      if (Date.now() < pausedUntilRef.current) return; // still paused
-      setCurrent((c) => (c + 1) % total);
+    if (n <= perView) return;
+    const id = setInterval(() => {
+      if (Date.now() >= pausedUntil.current) setIdx(i => i + 1);
     }, AUTO_PLAY_MS);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [total]);
+    return () => clearInterval(id);
+  }, [n, perView]);
 
-  /** Call this on any manual navigation to pause auto-play for 5 minutes */
-  const recordManualInteraction = useCallback(() => {
-    pausedUntilRef.current = Date.now() + MANUAL_PAUSE_MS;
-  }, []);
+  /* ── Manual navigation ───────────────────────────────────────────── */
+  const pause = () => { pausedUntil.current = Date.now() + MANUAL_PAUSE_MS; };
+  const prev  = () => { pause(); setIdx(i => i - 1); };
+  const next  = () => { pause(); setIdx(i => i + 1); };
+  const goTo  = (i: number) => { pause(); setIdx(perView + i); };
 
-  const goTo = useCallback(
-    (index: number) => {
-      recordManualInteraction();
-      setCurrent(index);
-    },
-    [recordManualInteraction]
-  );
+  /* ── Derived values ──────────────────────────────────────────────── */
+  const realIdx = ((idx - perView) % n + n) % n;
+  const pct     = 100 / perView;
 
-  const prev = useCallback(() => {
-    recordManualInteraction();
-    setCurrent((c) => (c - 1 + total) % total);
-  }, [total, recordManualInteraction]);
+  // Cloned array: [tail clone] + [real items] + [head clone]
+  const cloned = [
+    ...items.slice(-perView),
+    ...items,
+    ...items.slice(0, perView),
+  ];
 
-  const next = useCallback(() => {
-    recordManualInteraction();
-    setCurrent((c) => (c + 1) % total);
-  }, [total, recordManualInteraction]);
+  /* ── All items fit — no carousel needed ─────────────────────────── */
+  if (n <= perView) {
+    return (
+      <div
+        className="grid gap-6"
+        style={{ gridTemplateColumns: `repeat(${n}, 1fr)` }}
+      >
+        {items}
+      </div>
+    );
+  }
 
-  const pages = Array.from({ length: total }, (_, i) =>
-    children.slice(i * perView, i * perView + perView)
-  );
-
+  /* ── Carousel ────────────────────────────────────────────────────── */
   return (
-    <div className="relative">
-      {/* Slides */}
-      <div className="overflow-hidden">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${current * 100}%)` }}
-        >
-          {pages.map((page, pageIdx) => (
-            <div
-              key={pageIdx}
-              className="w-full flex-shrink-0 grid gap-6"
-              style={{ gridTemplateColumns: `repeat(${perView}, 1fr)` }}
-            >
-              {page}
-            </div>
-          ))}
-        </div>
+    <div className="relative overflow-hidden">
+      {/* Track */}
+      <div
+        className="flex"
+        style={{
+          transform:  `translateX(${-(idx * pct)}%)`,
+          transition: animated
+            ? `transform ${SLIDE_MS}ms cubic-bezier(0.45, 0, 0.55, 1)`
+            : "none",
+        }}
+      >
+        {cloned.map((child, i) => (
+          <div
+            key={i}
+            className="flex-shrink-0 px-3"
+            style={{ width: `${pct}%` }}
+          >
+            {child}
+          </div>
+        ))}
       </div>
 
       {/* Controls */}
-      {total > 1 && (
-        <div className="flex items-center justify-center gap-3 mt-8">
-          <button
-            onClick={prev}
-            className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-[#0369A1] hover:text-[#0369A1] transition-colors text-lg leading-none"
-            aria-label="Previous"
-          >
-            ‹
-          </button>
-          {Array.from({ length: total }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className={`rounded-full transition-all duration-300 ${
-                i === current
-                  ? "w-6 h-2 bg-[#0369A1]"
-                  : "w-2 h-2 bg-slate-300 hover:bg-slate-400"
-              }`}
-              aria-label={`Go to page ${i + 1}`}
-            />
-          ))}
-          <button
-            onClick={next}
-            className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-[#0369A1] hover:text-[#0369A1] transition-colors text-lg leading-none"
-            aria-label="Next"
-          >
-            ›
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
+      <div className="flex items-center justify-center gap-3 mt-8">
+        <button
+          onClick={prev}
+          aria-label="Previous"
+          className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-[#0369A1] hover:text-[#0369A1] transition-colors text-lg leading-none"
+        >
+          ‹
+        </button>
 
-/** Styled company logo badge */
-export function LogoBadge({
-  text,
-  bg,
-  light = true,
-}: {
-  text: string;
-  bg: string;
-  light?: boolean;
-}) {
-  return (
-    <span
-      className="inline-flex items-center justify-center h-7 px-3 rounded-md text-[10px] font-extrabold tracking-widest uppercase"
-      style={{ backgroundColor: bg, color: light ? "#fff" : "#0F172A" }}
-    >
-      {text}
-    </span>
+        {Array.from({ length: n }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            className={`rounded-full transition-all duration-300 ${
+              i === realIdx
+                ? "w-6 h-2 bg-[#0369A1]"
+                : "w-2 h-2 bg-slate-300 hover:bg-slate-400"
+            }`}
+          />
+        ))}
+
+        <button
+          onClick={next}
+          aria-label="Next"
+          className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-[#0369A1] hover:text-[#0369A1] transition-colors text-lg leading-none"
+        >
+          ›
+        </button>
+      </div>
+    </div>
   );
 }
